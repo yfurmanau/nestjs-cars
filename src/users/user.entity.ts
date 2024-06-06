@@ -20,6 +20,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ default: true })
+  admin: boolean;
+
   // we use a function here to avoid circular dependencies
   @OneToMany(() => Report, (report) => report.user)
   reports: Report[];
