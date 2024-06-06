@@ -21,6 +21,7 @@ import * as process from 'node:process';
         type: 'sqlite',
         database: config.get<string>('DB_NAME'),
         entities: [User, Report],
+        // only use this flag before first deployment
         synchronize: true,
       }),
     }),
@@ -39,11 +40,12 @@ import * as process from 'node:process';
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          keys: ['secret'],
+          keys: [this.configService.get('COOKIE_KEY')],
         }),
       )
       .forRoutes('*');
